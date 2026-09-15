@@ -1,0 +1,37 @@
+# Unofi Configuration
+# Copy this to configs/unofi.yaml and customize
+
+server:
+  host: "0.0.0.0"
+  port: 8080
+  tls_cert: ""
+  tls_key: ""
+  read_timeout: "30s"
+  write_timeout: "60s"
+  idle_timeout: "120s"
+  web_dir: "./web/static"
+
+database:
+  path: "./data/unofi.db"
+  busy_timeout_ms: 10000
+  max_open_conns: 1
+
+mikrotik:
+  address: ""           # e.g., 192.168.1.1
+  port: 8728            # API port (8728 for API, 8729 for API-SSL)
+  username: "admin"
+  password: ""
+  use_tls: false        # true for API-SSL (port 8729)
+  timeout: "10s"
+
+auth:
+  session_ttl: "10h"
+  token_secret: ""       # Generate with: openssl rand -hex 32
+
+logging:
+  level: "info"          # debug, info, warn, error
+  format: "text"         # text, json
+
+monitoring:
+  enabled: true
+  address: ":6060"

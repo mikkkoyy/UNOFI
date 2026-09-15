@@ -1,0 +1,30 @@
+# Binaries
+unofi
+unofi.exe
+*.exe
+
+# Data
+data/
+*.db
+
+# Secrets
+configs/unofi.yaml
+*.key
+*.pem
+*.crt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+*.out
+coverage.txt
+
+# Go
+go.sum.bak
