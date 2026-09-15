@@ -1,6 +1,5 @@
-```bat
 @echo off
-setlocal
+setlocal EnableExtensions
 cd /d "D:\FILES\project\Unofi"
 
 echo ========================================
@@ -11,9 +10,21 @@ echo.
 echo [1/3] Commit and push...
 git add .
 git diff --cached --quiet
+
 if errorlevel 1 (
     git commit -m "chore: update Unofi"
+    if errorlevel 1 (
+        echo Commit failed.
+        pause
+        exit /b 1
+    )
+
     git push
+    if errorlevel 1 (
+        echo Push failed.
+        pause
+        exit /b 1
+    )
 ) else (
     echo No changes to commit.
 )
@@ -29,28 +40,36 @@ if errorlevel 1 (
 
 echo.
 echo [3/3] Starting Unofi...
-start "UNOFI SERVER" /b unofi.exe
+
+for /f %%P in ('powershell -NoProfile -Command "$p=Start-Process -FilePath '.\unofi.exe' -PassThru; $p.Id"') do set "UNOFI_PID=%%P"
 
 echo.
 echo ========================================
-echo UNOFI SERVER RUNNING
+echo        UNOFI SERVER RUNNING
+echo PID: %UNOFI_PID%
+echo.
 echo Press L to shutdown and close.
 echo ========================================
 echo.
 
 :WAIT
-choice /c L /n /t 1 /d L >nul
+choice /c LX /n /t 1 /d X >nul
+
+if errorlevel 2 goto WAIT
 if errorlevel 1 goto SHUTDOWN
+
 goto WAIT
 
 :SHUTDOWN
 echo.
 echo Shutting down Unofi...
 
-taskkill /f /im unofi.exe >nul 2>&1
+if defined UNOFI_PID (
+    taskkill /f /pid %UNOFI_PID% >nul 2>&1
+)
 
 echo Server stopped.
 echo Closing...
+
 timeout /t 1 /nobreak >nul
-exit
-```
+exit /b 0
