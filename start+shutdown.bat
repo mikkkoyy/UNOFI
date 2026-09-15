@@ -4,7 +4,7 @@ setlocal EnableExtensions
 cd /d "D:\FILES\project\Unofi"
 
 echo ========================================
-echo              UNOFI
+echo UNOFI
 echo ========================================
 echo.
 
@@ -73,19 +73,18 @@ exit /b 1
 
 echo.
 echo ========================================
-echo        UNOFI SERVER RUNNING
+echo UNOFI SERVER RUNNING
 echo PID: %UNOFI_PID%
 echo.
 echo Press L to shutdown and close.
 echo ========================================
 echo.
 
-:WAIT
-choice /c L /n /t 1 /d L >nul
 
+choice /c L /n >nul
 goto SHUTDOWN
 
-:SHUTDOWN
+
 echo.
 echo Shutting down Unofi...
 
