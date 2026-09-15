@@ -8,7 +8,8 @@ echo              UNOFI
 echo ========================================
 echo.
 
-echo [1/3] Commit and push...
+echo [1/3] Updating repository...
+
 git add .
 git diff --cached --quiet
 
@@ -21,7 +22,6 @@ pause
 exit /b 1
 )
 
-```
 git push
 if errorlevel 1 (
     echo.
@@ -29,7 +29,6 @@ if errorlevel 1 (
     pause
     exit /b 1
 )
-```
 
 ) else (
 echo No changes to commit.
@@ -82,12 +81,9 @@ echo ========================================
 echo.
 
 :WAIT
-choice /c LX /n /t 1 /d X >nul
+choice /c L /n /t 1 /d L >nul
 
-if errorlevel 2 goto WAIT
-if errorlevel 1 goto SHUTDOWN
-
-goto WAIT
+goto SHUTDOWN
 
 :SHUTDOWN
 echo.
