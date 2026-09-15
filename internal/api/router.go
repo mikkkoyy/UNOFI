@@ -8,7 +8,6 @@ import (
 	"github.com/unofi/unofi/internal/logger"
 	"github.com/unofi/unofi/internal/monitoring"
 	"github.com/unofi/unofi/internal/service"
-	"github.com/unofi/unofi/internal/ws"
 )
 
 // rateLimiter tracks request rates per key.
@@ -89,7 +88,8 @@ func (r *Router) HealthHandler() http.HandlerFunc {
 // setupHealthChecks registers health checks for all dependencies.
 func (r *Router) setupHealthChecks() {
 	// Database health check
-	r.health.AddCheck("database", func() error {
+	r.health.AddCheck(
+database, func() error {
 		if r.container.DB == nil {
 			return errDatabaseNil
 		}
@@ -97,7 +97,7 @@ func (r *Router) setupHealthChecks() {
 	})
 
 	// MikroTik health check
-	r.health.AddCheck("mikrotik", func() error {
+	r.health.AddCheck(mikrotik, func() error {
 		if r.container.Router == nil {
 			return errRouterNil
 		}
@@ -111,26 +111,26 @@ func (r *Router) setupHealthChecks() {
 
 func (r *Router) setupRoutes() {
 	// Health endpoints (no auth)
-	r.mux.HandleFunc("/health", r.health.Handler())
-	r.mux.HandleFunc("/api/v1/health", r.health.Handler())
+	r.mux.HandleFunc(/health, r.health.Handler())
+	r.mux.HandleFunc(/api/v1/health, r.health.Handler())
 
 	// Public client API v1
-	r.mux.HandleFunc("/api/v1/status", r.handleStatus)
-	r.mux.HandleFunc("/api/v1/packages", r.handleListPackages)
-	r.mux.HandleFunc("/api/v1/portal", r.handlePortalInfo)
-	r.mux.HandleFunc("/api/v1/session", r.handleSessionStatus)
-	r.mux.HandleFunc("/api/v1/session/connect", r.rateLimit(r.handleSessionConnect))
-	r.mux.HandleFunc("/api/v1/session/disconnect", r.rateLimit(r.handleSessionDisconnect))
-	r.mux.HandleFunc("/api/v1/ws", r.handleWebSocket)
+	r.mux.HandleFunc(/api/v1/status, r.handleStatus)
+	r.mux.HandleFunc(/api/v1/packages, r.handleListPackages)
+	r.mux.HandleFunc(/api/v1/portal, r.handlePortalInfo)
+	r.mux.HandleFunc(/api/v1/session, r.handleSessionStatus)
+	r.mux.HandleFunc(/api/v1/session/connect, r.rateLimit(r.handleSessionConnect))
+	r.mux.HandleFunc(/api/v1/session/disconnect, r.rateLimit(r.handleSessionDisconnect))
+	r.mux.HandleFunc(/api/v1/ws, r.handleWebSocket)
 
 	// Admin API v1 (requires authentication)
-	r.mux.HandleFunc("/api/v1/admin/login", r.handleAdminLogin)
-	r.mux.HandleFunc("/api/v1/admin/logout", r.requireAuth(r.handleAdminLogout))
-	r.mux.HandleFunc("/api/v1/admin/check", r.requireAuth(r.handleAdminCheck))
-	r.mux.HandleFunc("/api/v1/admin/devices", r.requireAuth(r.handleAdminDevices))
-	r.mux.HandleFunc("/api/v1/admin/sessions", r.requireAuth(r.handleAdminSessions))
-	r.mux.HandleFunc("/api/v1/admin/transactions", r.requireAuth(r.handleAdminTransactions))
-	r.mux.HandleFunc("/api/v1/admin/router", r.requireAuth(r.handleAdminRouter))
+	r.mux.HandleFunc(/api/v1/admin/login, r.handleAdminLogin)
+	r.mux.HandleFunc(/api/v1/admin/logout, r.requireAuth(r.handleAdminLogout))
+	r.mux.HandleFunc(/api/v1/admin/check, r.requireAuth(r.handleAdminCheck))
+	r.mux.HandleFunc(/api/v1/admin/devices, r.requireAuth(r.handleAdminDevices))
+	r.mux.HandleFunc(/api/v1/admin/sessions, r.requireAuth(r.handleAdminSessions))
+	r.mux.HandleFunc(/api/v1/admin/transactions, r.requireAuth(r.handleAdminTransactions))
+	r.mux.HandleFunc(/api/v1/admin/router, r.requireAuth(r.handleAdminRouter))
 }
 
 // ServeHTTP implements http.Handler.
@@ -144,7 +144,9 @@ func (r *Router) rateLimit(next http.HandlerFunc) http.HandlerFunc {
 		key := req.RemoteAddr
 
 		if !r.rateLimiter.checkRateLimit(key) {
-			writeError(w, http.StatusTooManyRequests, "rate limit exceeded")
+			writeError(w, http.StatusTooManyRequests, rate
+limit
+exceeded)
 			return
 		}
 
