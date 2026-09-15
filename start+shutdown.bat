@@ -12,36 +12,39 @@ git add .
 git diff --cached --quiet
 
 if errorlevel 1 (
-    git commit -m "chore: update Unofi"
-    if errorlevel 1 (
-        echo Commit failed.
-        pause
-        exit /b 1
-    )
+git commit -m "chore: update Unofi"
+if errorlevel 1 (
+echo Commit failed.
+pause
+exit /b 1
+)
 
-    git push
-    if errorlevel 1 (
-        echo Push failed.
-        pause
-        exit /b 1
-    )
+```
+git push
+if errorlevel 1 (
+    echo Push failed.
+    pause
+    exit /b 1
+)
+```
+
 ) else (
-    echo No changes to commit.
+echo No changes to commit.
 )
 
 echo.
 echo [2/3] Building Unofi...
 go build -o unofi.exe .
 if errorlevel 1 (
-    echo Build failed.
-    pause
-    exit /b 1
+echo Build failed.
+pause
+exit /b 1
 )
 
 echo.
 echo [3/3] Starting Unofi...
 
-for /f %%P in ('powershell -NoProfile -Command "$p=Start-Process -FilePath '.\unofi.exe' -PassThru; $p.Id"') do set "UNOFI_PID=%%P"
+for /f %%P in ('powershell -NoProfile -Command "$p=Start-Process -FilePath ''.\unofi.exe'' -PassThru; $p.Id"') do set "UNOFI_PID=%%P"
 
 echo.
 echo ========================================
@@ -65,7 +68,7 @@ echo.
 echo Shutting down Unofi...
 
 if defined UNOFI_PID (
-    taskkill /f /pid %UNOFI_PID% >nul 2>&1
+taskkill /f /pid %UNOFI_PID% >nul 2>&1
 )
 
 echo Server stopped.
