@@ -1,4 +1,4 @@
-# foswvs-go
+# UnoFi
 
 **Free and Open-Source WiFi Vendo Software** — rewritten in Go.
 
@@ -19,7 +19,7 @@ A complete rewrite of [foswvs](https://github.com/foswvs/foswvs.git) that replac
 
 ## Progressive Web App (PWA)
 
-foswvs-go is a full Progressive Web App with offline support, installable on mobile devices, and fast loading.
+UnoFi is a full Progressive Web App with offline support, installable on mobile devices, and fast loading.
 
 - **Install on home screen** — Add the app like a native app (Android/iOS)
 - **Works offline** — Cached assets load instantly, even without internet
@@ -31,10 +31,10 @@ See [PWA.md](PWA.md) for setup, customization, and testing instructions.
 
 ### Generate PWA Icons
 
-```bash
+bash
 npm install sharp
 node scripts/generate-pwa-icons.js
-```
+
 
 Or see [web/static/icons/README.md](web/static/icons/README.md) for manual icon generation.
 
@@ -44,15 +44,15 @@ Or see [web/static/icons/README.md](web/static/icons/README.md) for manual icon 
 
 **Latest release (one-liner):**
 
-```bash
-curl -sSfL https://raw.githubusercontent.com/foswvs/foswvs-go/main/install.sh | bash
-```
+bash
+curl -sSfL https://raw.githubusercontent.com/foswvs/UnoFi/main/install.sh | bash
+
 
 **Specific version:**
 
-```bash
-curl -sSfL https://raw.githubusercontent.com/foswvs/foswvs-go/main/install.sh | bash -s v1.0.0
-```
+bash
+curl -sSfL https://raw.githubusercontent.com/foswvs/UnoFi/main/install.sh | bash -s v1.0.0
+
 
 Then follow [INSTALL.md](INSTALL.md) to configure the WiFi AP, DHCP server, and systemd service.
 
@@ -62,9 +62,9 @@ Then follow [INSTALL.md](INSTALL.md) to configure the WiFi AP, DHCP server, and 
 
 ## Architecture
 
-```
+
 ┌──────────────────────────────────────────┐
-│               foswvs-go binary           │
+│               UnoFi binary           │
 │                                          │
 │  ┌──────────┐  ┌──────────┐  ┌────────┐ │
 │  │ HTTP/TLS │  │ WS Hub   │  │ SQLite │ │
@@ -84,7 +84,7 @@ Then follow [INSTALL.md](INSTALL.md) to configure the WiFi AP, DHCP server, and 
 │  │ (fwall)  │  │ (coins)  │             │
 │  └──────────┘  └──────────┘             │
 └──────────────────────────────────────────┘
-```
+
 
 ### WebSocket message types
 
@@ -108,7 +108,7 @@ optional HTTPS for the QR camera scanner): **[INSTALL.md](INSTALL.md)**.
 
 Condensed version, if you've done this before:
 
-```bash
+bash
 # On the Pi: system packages + network setup
 sudo apt install -y hostapd isc-dhcp-server iptables openssl
 sudo systemctl unmask hostapd
@@ -119,7 +119,7 @@ echo 'net.ipv4.ip_forward=1' | sudo tee /etc/sysctl.d/99-foswvs.conf && sudo sys
 #   static ip_address=10.0.0.1/24
 #   nohook wpa_supplicant
 
-git clone https://github.com/foswvs/foswvs-go.git && cd foswvs-go
+git clone https://github.com/foswvs/UnoFi.git && cd UnoFi
 sudo cp conf/hostapd.conf /etc/hostapd/hostapd.conf
 sudo cp conf/dhcpd.conf /etc/dhcp/dhcpd.conf
 sudo sed -i 's/^INTERFACESv4=.*/INTERFACESv4="wlan0"/' /etc/default/isc-dhcp-server
@@ -128,16 +128,16 @@ sudo systemctl enable hostapd isc-dhcp-server
 
 # From your own machine: cross-compile + deploy the app
 #   (copies the binary, web/static, scripts/iptables-base.sh, and the
-#   systemd unit, then enables + starts foswvs-go)
+#   systemd unit, then enables + starts UnoFi)
 make deploy PI_HOST=pi@<hostname-or-ip>
 
 # Back on the Pi: bring the AP up
 sudo systemctl restart dhcpcd
 sudo systemctl start isc-dhcp-server hostapd
-```
+
 
 `scripts/iptables-base.sh` (installed to `/usr/local/bin/` by `make
-deploy`, run automatically before `foswvs-go` starts via
+deploy`, run automatically before `UnoFi` starts via
 `ExecStartPre=`) sets up the base NAT/DNAT/forward rules — the Go binary
 itself only ever adds per-client rules as people pay for data, it doesn't
 own the underlying network policy.
@@ -153,11 +153,11 @@ own the underlying network policy.
 
 ## Development
 
-```bash
+bash
 # Run locally (no GPIO, no iptables — for UI development)
 make run
 # Open http://localhost:8080
-```
+
 
 ## API Endpoints
 
