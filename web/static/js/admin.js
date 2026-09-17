@@ -61,7 +61,7 @@
   // --- Check login status on page load ---
 
   function checkAuth() {
-    apiJSON('GET', '/admin/check').then(data => {
+    apiJSON('GET', '/api/admin/check').then(data => {
       if (data && data.status === 'ok') {
         // Authenticated — show dashboard, hide login
         $('admin-login-screen').classList.remove('show');
@@ -90,7 +90,7 @@ $('admin-signin').addEventListener('click', () => {
       return;
     }
     hideAdminError();
-    apiJSON('POST', '/admin/login', { password: pw }).then(data => {
+    apiJSON('POST', '/api/admin/login', { password: pw }).then(data => {
       // 'init' means first password ever — successful initialization
       // 'ok' means password verified, existing admin session
       if (data && (data.status === 'init' || data.status === 'ok')) {
@@ -135,7 +135,7 @@ $('admin-signin').addEventListener('click', () => {
         if (activeTextEl) activeTextEl.textContent = total > 0 ? `${total} user${total !== 1 ? 's' : ''} online` : 'no users yet';
       }).catch(() => { if ($('overview-users-total')) $('overview-users-total').textContent = 'err'; }),
 
-      apiJSON('GET', '/admin/check').then(r => {
+      apiJSON('GET', '/api/admin/check').then(r => {
         // Session already checked above, but use for active sessions count
       }).catch(() => {}),
 
