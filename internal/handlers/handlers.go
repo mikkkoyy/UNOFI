@@ -100,7 +100,13 @@ func (a *App) Routes() http.Handler {
 	// --- Static files ---
 	webRoot := a.WebDir
 	if webRoot == "" {
-		webRoot = filepath.Join(a.DataDir, "web")
+		candidate := filepath.Join(a.DataDir, "web")
+		if _, err := os.Stat(candidate); os.IsNotExist(err) {
+			// Data-dir path not found (e.g. Windows development);
+			// fall back to project-relative "web/static" next to the binary.
+			candidate = filepath.Join("web", "static")
+		}
+		webRoot = candidate
 	}
 	fs := http.FileServer(http.Dir(webRoot))
 
