@@ -112,6 +112,11 @@ func (a *App) Routes() http.Handler {
 
 	// Captive portal: unknown routes → index.html
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// Admin dashboard route
+		if r.URL.Path == "/admin" {
+			http.ServeFile(w, r, filepath.Join(webRoot, "admin.html"))
+			return
+		}
 		path := filepath.Join(webRoot, r.URL.Path)
 		if _, err := os.Stat(path); err != nil {
 			http.ServeFile(w, r, filepath.Join(webRoot, "index.html"))
