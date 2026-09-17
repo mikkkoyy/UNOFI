@@ -20,7 +20,9 @@
       </div>
       <h1>unofi</h1>
       <p class="sub">Network Management</p>
-      <input id="admin-password" type="password" placeholder="••••••••••••••••••••" autocomplete="off" aria-label="Administrator password">
+      <h2 class="admin-login-title">Administrator Login</h2>
+      <input id="admin-password" type="password" required placeholder="••••••••••••••••••••" autocomplete="off" aria-label="Administrator password">
+      <div class="admin-error" id="admin-error" style="margin-top: 10px; color: var(--danger); display:none; font-size: 12px;"></div>
       <button id="admin-signin" aria-label="Sign in as administrator">Sign In</button>
       <div class="login-sysinfo" id="login-sysinfo">
         <span>---</span><span>---</span>

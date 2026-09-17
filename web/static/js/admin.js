@@ -8,6 +8,19 @@
   function $(sel) { return document.querySelector(sel); }
   function qsa(sel) { return document.querySelectorAll(sel); }
 
+  function showAdminError(msg) {
+    const el = $('#admin-error');
+    if (el) {
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+  }
+
+  function hideAdminError() {
+    const el = $('#admin-error');
+    if (el) el.style.display = 'none';
+  }
+
   function api(method, path, body) {
     const url = `/api${path}`;
     const opts = {
@@ -70,12 +83,13 @@
 
   // --- Admin Login ---
 
-  $('admin-signin').addEventListener('click', () => {
+$('admin-signin').addEventListener('click', () => {
     const pw = $('admin-password').value.trim();
     if (pw.length === 0) {
       $('admin-password').setCustomValidity('Password required');
       return;
     }
+    hideAdminError();
     apiJSON('POST', '/admin/login', { password: pw }).then(data => {
       // 'init' means first password ever — successful initialization
       // 'ok' means password verified, existing admin session
@@ -86,18 +100,15 @@
         $('admin-dashboard').style.display = 'block';
         $('admin-username').textContent = 'Administrator';
         $('admin-session-status').textContent = 'Session active';
-        // Fetch initial data
+        // Initial fetch of dashboard data
         fetchOverview();
       } else {
-        // Show error
-        Portal.toast('Login failed: ' + (data && data.error ? data.error : 'invalid password'), false);
+        showAdminError('Invalid administrator password.');
       }
-    }).catch(err => {
-      Portal.toast('Login failed: ' + err.message, false);
+    }).catch(() => {
+      showAdminError('Unable to connect to UNOFI server. Try again.');
     });
-  });
-
-  // --- Logout ---
+  })();
 
   $('admin-logout').addEventListener('click', () => {
     apiJSON('GET', '/admin/logout').then(() => {
